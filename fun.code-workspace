@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../../../OneDrive/my_web_page/fun"
+		},
+		{
+			"path": "../../book application"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "DA Hackathon"
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
+	}
+}

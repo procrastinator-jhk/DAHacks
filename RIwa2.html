@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>College Savings Simulator</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* ...（前回のCSSと同じなので省略）... */
+    body {
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(120deg, #e3f2fd 0%, #fff 100%);
+      padding: 2rem;
+      margin: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem 2.5rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 6px 32px rgba(33,150,243,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+    }
+    h1 {
+      text-align: center;
+      color: #1976d2;
+      margin-bottom: 1.5rem;
+    }
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .step {
+      width: 32%;
+      padding: 0.7rem 0.2rem;
+      border-radius: 1rem;
+      text-align: center;
+      background: #e3f2fd;
+      color: #1976d2;
+      font-weight: 500;
+      opacity: 0.5;
+      transition: all 0.2s;
+    }
+    .step.active {
+      background: #1976d2;
+      color: #fff;
+      opacity: 1;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+    }
+    .wizard-step {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    .wizard-step.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .form-group {
+      margin-bottom: 1.3rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+      color: #1976d2;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #bdbdbd;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: #1976d2;
+      outline: none;
+    }
+    .children-list {
+      margin-bottom: 1rem;
+    }
+    .child-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.7fr 1.2fr;
+      gap: 0.6rem;
+      margin-bottom: 0.7rem;
+      align-items: center;
+      background: #f3f7fb;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.2rem;
+    }
+    .child-row input, .child-row select {
+      margin-bottom: 0;
+    }
+    .child-header {
+      display: grid;
+      grid-template-columns: 1.2fr 0.7fr 1.2fr;
+      gap: 0.6rem;
+      font-weight: bold;
+      color: #1976d2;
+      margin-bottom: 0.4rem;
+      font-size: 0.97rem;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    button {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.8rem 2.5rem;
+      font-size: 1.08rem;
+      font-weight: 500;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+      transition: background 0.2s;
+    }
+    button:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+    }
+    button:hover:not(:disabled) {
+      background: #125ea2;
+    }
+    .result-card {
+      background: #f4f8fc;
+      border-radius: 0.9rem;
+      padding: 1.3rem 1.2rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 1.5px 4px rgba(0,0,0,0.04);
+    }
+    .result-card strong {
+      color: #1976d2;
+    }
+    .chart-container {
+      max-width: 380px;
+      margin: 2rem auto 1.5rem auto;
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.07);
+      padding: 1rem 1.5rem 1.2rem 1.5rem;
+    }
+    .progress-bar {
+      background: #e3f2fd;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin: 0.5rem 0 0.8rem 0;
+      height: 18px;
+    }
+    .progress-bar-inner {
+      background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+      height: 100%;
+      color: #fff;
+      font-size: 0.95rem;
+      text-align: right;
+      padding-right: 0.6rem;
+      border-radius: 1rem;
+      transition: width 0.7s;
+      line-height: 18px;
+    }
+    @media (max-width: 700px) {
+      .container { padding: 1.2rem 0.5rem; }
+      .stepper { flex-direction: column; gap: 0.4rem; }
+      .step { width: 100%; }
+      .child-header, .child-row { grid-template-columns: 1fr; }
+      .chart-container { padding: 0.5rem 0.2rem; }
+    }
+  </style>
+</head>
+<body>
+    <div id="step1" class="wizard-step active">
+  <div class="form-group">
+    <label>Email Address
+      <span title="We will use this to save your simulation history.">🛈</span>
+    </label>
+    <input type="email" id="emailAddress" required placeholder="your@email.com">
+  </div>
+  <div class="form-group">
+    <label>Household Income (USD)
+      <span title="Your annual household income before taxes.">🛈</span>
+    </label>
+    <input type="number" id="householdIncome" min="0" step="0.01" required>
+  </div>
+  <!-- ...以下同様... -->
+</div>
+  <div class="container">
+    <h1>College Savings Simulator</h1>
+    <div class="stepper">
+      <div class="step active" id="stepper1">1. Household</div>
+      <div class="step" id="stepper2">2. Children</div>
+      <div class="step" id="stepper3">3. Results</div>
+    </div>
+    <!-- Step 1: Household Info -->
+    <div id="step1" class="wizard-step active">
+      <div class="form-group">
+        <label>Household Income (USD)
+          <span title="Your annual household income before taxes.">🛈</span>
+        </label>
+        <input type="number" id="householdIncome" min="0" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label>Current College Savings (USD)
+          <span title="How much you have already saved for college.">🛈</span>
+        </label>
+        <input type="number" id="currentSavings" min="0" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label>Monthly Contribution (USD)
+          <span title="How much you plan to save each month from now until college.">🛈</span>
+        </label>
+        <input type="number" id="monthlyContribution" min="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Expected Annual Return (%) 
+          <span title="The average yearly return rate you expect from your investments.">🛈</span>
+        </label>
+        <input type="number" id="expectedReturn" min="0" step="0.1" value="5">
+      </div>
+      <div class="form-group">
+        <label>College Cost Inflation (%) 
+          <span title="How much college costs are expected to rise each year.">🛈</span>
+        </label>
+        <input type="number" id="collegeInflation" min="0" step="0.1" value="3">
+      </div>
+      <div class="btn-row" style="justify-content: flex-end;">
+        <button onclick="goToStep2()">Next</button>
+      </div>
+    </div>
+    <!-- Step 2: Children Info -->
+    <div id="step2" class="wizard-step">
+      <div class="form-group">
+        <label>Number of Children</label>
+        <input type="number" id="childCount" min="1" max="8" placeholder="e.g. 2">
+        <button onclick="generateChildInputs()" style="margin-top:0.5rem;">Set</button>
+      </div>
+      <form id="childForm"></form>
+      <div class="btn-row">
+        <button onclick="goToStep1()">Back</button>
+        <button onclick="goToStep3()">Next</button>
+      </div>
+    </div>
+    <!-- Step 3: Results -->
+    <div id="step3" class="wizard-step">
+      <div id="resultsArea"></div>
+      <div class="btn-row">
+        <button onclick="goToStep2()">Back</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Stepper UI
+    function setActiveStep(step) {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('step' + i).classList.remove('active');
+        document.getElementById('stepper' + i).classList.remove('active');
+      }
+      document.getElementById('step' + step).classList.add('active');
+      document.getElementById('stepper' + step).classList.add('active');
+    }
+    function goToStep1() { setActiveStep(1); }
+    function goToStep2() { setActiveStep(2); }
+    function goToStep3() {
+      if (validateChildrenInputs()) {
+        setActiveStep(3);
+        showResults();
+      }
+    }
+
+    // College cost averages (2024 USD)
+    const COLLEGE_COSTS = {
+      "in-state": 27000,
+      "out-of-state": 45000,
+      "private": 60000,
+      "2-year": 12000
+    };
+
+    // Generate child info inputs
+    function generateChildInputs() {
+      const count = parseInt(document.getElementById('childCount').value);
+      const form = document.getElementById('childForm');
+      form.innerHTML = '';
+      if (isNaN(count) || count <= 0) {
+        alert("Please enter a valid number of children.");
+        return;
+      }
+      // Header
+      const header = document.createElement('div');
+      header.className = 'child-header';
+      header.innerHTML = `<div>Name</div><div>Age</div><div>College Type</div>`;
+      form.appendChild(header);
+      for (let i = 0; i < count; i++) {
+        const div = document.createElement('div');
+        div.className = 'child-row';
+        div.innerHTML = `
+          <input type="text" name="name" placeholder="Name" required>
+          <input type="number" name="age" placeholder="Age" min="0" max="30" required>
+          <select name="collegeType" required>
+            <option value="in-state">In-State Public</option>
+            <option value="out-of-state">Out-of-State Public</option>
+            <option value="private">Private</option>
+            <option value="2-year">2-Year College</option>
+          </select>
+        `;
+        form.appendChild(div);
+      }
+      // 子供情報入力欄でEnterキーで次のステップへ
+      setTimeout(() => {
+        const childInputs = form.querySelectorAll('input, select');
+        childInputs.forEach(input => {
+          input.addEventListener('keydown', function(event) {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              goToStep3();
+            }
+          });
+        });
+      }, 100);
+    }
+
+    // Step1: Household情報でEnterキーで次へ
+    document.querySelectorAll('#step1 input').forEach(input => {
+      input.addEventListener('keydown', function(event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          goToStep2();
+        }
+      });
+    });
+
+    // Step2: 子供人数入力欄でEnterキーで子供フォーム生成
+    document.getElementById('childCount').addEventListener('keydown', function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        generateChildInputs();
+      }
+    });
+
+    // Validate children info before showing results
+    function validateChildrenInputs() {
+      const children = document.querySelectorAll('.child-row');
+      if (children.length === 0) {
+        alert("Please set the number of children and enter their information.");
+        return false;
+      }
+      for (let i = 0; i < children.length; i++) {
+        const name = children[i].querySelector('input[name="name"]').value.trim();
+        const age = parseInt(children[i].querySelector('input[name="age"]').value);
+        const collegeType = children[i].querySelector('select[name="collegeType"]').value;
+        if (!name) {
+          alert(`Please enter the name for child ${i + 1}.`);
+          return false;
+        }
+        if (isNaN(age) || age < 0 || age > 30) {
+          alert(`Please enter a valid age for ${name}.`);
+          return false;
+        }
+        if (!collegeType) {
+          alert(`Please select the college type for ${name}.`);
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Show results with chart and cards
+    function showResults() {
+      // household info
+      const householdIncome = parseFloat(document.getElementById('householdIncome').value);
+      const currentSavings = parseFloat(document.getElementById('currentSavings').value);
+      const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+      const expectedReturn = (parseFloat(document.getElementById('expectedReturn').value) || 5) / 100;
+      const collegeInflation = (parseFloat(document.getElementById('collegeInflation').value) || 3) / 100;
+      // children info
+      const children = document.querySelectorAll('.child-row');
+      let resultsHTML = `
+        <div class="result-card">
+          <strong>Household Income:</strong> $${householdIncome.toLocaleString()}<br>
+          <strong>Current College Savings:</strong> $${currentSavings.toLocaleString()}<br>
+          <strong>Monthly Contribution:</strong> $${monthlyContribution.toLocaleString()}<br>
+          <strong>Expected Annual Return:</strong> ${(expectedReturn*100).toFixed(1)}%<br>
+          <strong>College Cost Inflation:</strong> ${(collegeInflation*100).toFixed(1)}%
+        </div>
+      `;
+      children.forEach((child, idx) => {
+        const name = child.querySelector('input[name="name"]').value.trim();
+        const age = parseInt(child.querySelector('input[name="age"]').value);
+        const collegeType = child.querySelector('select[name="collegeType"]').value;
+        // Years until college
+        const yearsToCollege = 18 - age;
+        // Future annual cost (inflation-adjusted)
+        const futureAnnualCost = COLLEGE_COSTS[collegeType] * Math.pow(1 + collegeInflation, yearsToCollege);
+        // 4-year total cost
+        const totalFutureCost = futureAnnualCost * 4;
+        // Future value of savings+contributions (compound interest)
+        let futureSavings = currentSavings * Math.pow(1 + expectedReturn, yearsToCollege);
+        for (let y = 1; y <= yearsToCollege; y++) {
+          futureSavings += monthlyContribution * 12 * Math.pow(1 + expectedReturn, yearsToCollege - y);
+        }
+        // Coverage %
+        const coverage = Math.min(100, (futureSavings / totalFutureCost) * 100);
+        // Chart
+        resultsHTML += `
+          <div class="result-card">
+            <strong>${name}</strong> (${collegeType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())})<br>
+            Age: ${age} &nbsp; | &nbsp; Years until college: ${yearsToCollege}<br>
+            <strong>Estimated total cost at college entry:</strong> $${totalFutureCost.toLocaleString(undefined, {maximumFractionDigits:0})}<br>
+            <strong>Projected savings at that time:</strong> $${futureSavings.toLocaleString(undefined, {maximumFractionDigits:0})}<br>
+            <div class="progress-bar">
+              <div class="progress-bar-inner" style="width:${coverage}%;">
+                ${coverage.toFixed(1)}%
+              </div>
+            </div>
+            <canvas id="chart${idx}" width="320" height="160" class="chart-canvas"></canvas>
+            <div style="font-size:0.97rem; color:#666;">
+              ${coverage >= 100 ? "Congratulations! Your savings plan is on track to fully cover college costs." : 
+              `You may need to increase your savings or consider scholarships/financial aid to cover the shortfall.`}
+            </div>
+          </div>
+        `;
+        setTimeout(() => {
+          drawPieChart(`chart${idx}`, futureSavings, Math.max(0, totalFutureCost - futureSavings));
+        }, 100);
+      });
+      document.getElementById('resultsArea').innerHTML = resultsHTML;
+    }
+
+    // Draw Chart.js pie chart
+    function drawPieChart(canvasId, savings, shortfall) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Projected Savings', 'Shortfall'],
+          datasets: [{
+            data: [savings, shortfall],
+            backgroundColor: ['#1976d2', '#ef5350'],
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { display: true, position: 'bottom' }
+          },
+          cutout: '70%',
+        }
+      });
+    }
+  </script>
+</body>
+</html>
+
