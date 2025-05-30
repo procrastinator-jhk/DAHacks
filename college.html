@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>College Profile • CollegeCost Voices</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Site Header -->
+  <header>
+    <div class="container">
+      <h1 id="collegeName">College Name</h1>
+      <p class="subtitle">Real voices. Real costs. For international students.</p>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="submit.html">Submit Your Cost</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container profile-page">
+    <!-- Cost Summary -->
+    <section class="card">
+      <h2 class="section-title">Cost Summary</h2>
+      <ul class="info-list">
+        <li><strong>Academic System:</strong> <span id="system">N/A</span></li>
+        <li><strong>Tuition per Term:</strong> <span id="tuition">$0</span></li>
+        <li><strong>Living Cost per Month:</strong> <span id="living">$0</span></li>
+        <li><strong>Accommodation:</strong> <span id="accomType">N/A</span> — $<span id="accomCost">0</span>/month</li>
+        <li><strong>Transportation:</strong> $<span id="transport">0</span>/month</li>
+        <li><strong>Food:</strong> $<span id="food">0</span>/month</li>
+        <li><strong>Insurance:</strong> $<span id="insurance">0</span>/year</li>
+      </ul>
+    </section>
+
+    <!-- Student Review -->
+    <section class="card">
+      <h2 class="section-title">Student Review</h2>
+      <ul class="info-list">
+        <li><strong>Reviewer:</strong> <span id="student">N/A</span></li>
+        <li><strong>Tips:</strong> <span id="tips">N/A</span></li>
+      </ul>
+    </section>
+
+    <!-- Contact -->
+    <section class="card contact-card">
+      <h2 class="section-title">Contact</h2>
+      <a href="#" id="contactLink" class="btn">Email Reviewer</a>
+    </section>
+  </main>
+
+  <!-- Redirect if no college selected -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('name')) location.href = 'index.html';
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

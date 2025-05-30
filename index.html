@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FOMC Statement Analyzer</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>CollegeCost Voices</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>FOMC Statement Analyzer</h1>
-
-    <textarea id="statementInput" placeholder="Paste the FOMC statement here..."></textarea>
-
-    <div class="buttons">
-      <button id="summarizeBtn">Summarize</button>
-      <button id="analyzeBtn">Analyze Tone</button>
+  <!-- Site Header -->
+  <header>
+    <div class="container">
+      <h1>CollegeCost Voices</h1>
+      <p class="subtitle">Real voices. Real costs. For international students.</p>
+      <nav class="main-nav">
+        <a href="index.html" class="active">Home</a>
+        <a href="submit.html">Submit Your Cost</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="results">
-      <h2>Summary</h2>
-      <p id="summaryResult">(summary will appear here)</p>
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Filter Bar -->
+    <section class="filter-bar">
+      <input id="minBudget" type="number" placeholder="Min Tuition ($)" />
+      <input id="maxBudget" type="number" placeholder="Max Tuition ($)" />
+      <button id="filterBtn" class="btn">Filter</button>
+    </section>
 
-      <h2>Tone</h2>
-      <p id="toneResult">(hawkish or dovish)</p>
+    <!-- College Cards -->
+    <section id="collegeList" class="college-list">
+      <!-- Cards rendered by script.js -->
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 CollegeCost Voices</p>
     </div>
-  </div>
+  </footer>
 
-  <script src="app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

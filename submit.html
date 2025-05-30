@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Costs • CollegeCost Voices</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Site Header -->
+  <header>
+    <div class="container">
+      <h1>Submit Your College Cost</h1>
+      <p class="subtitle">Help others by sharing your real costs</p>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="submit.html" class="active">Submit Your Cost</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Submission Form -->
+    <section class="form-section">
+      <form id="costForm" class="card form-card">
+        <h2 class="section-title">Share Your Experience</h2>
+        <div class="form-group">
+          <label for="system">Academic System*</label>
+          <select id="system" name="system" required>
+            <option value="quarter">Quarter System (4 terms/year)</option>
+            <option value="semester">Semester System (2 terms/year)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="collegeName">College Name*</label>
+          <input id="collegeName" type="text" name="collegeName" placeholder="e.g. De Anza College" required>
+        </div>
+        <div class="form-group">
+          <label for="tuition">Tuition per Term ($)*</label>
+          <input id="tuition" type="number" name="tuition" placeholder="e.g. 3000" required>
+        </div>
+        <div class="form-group">
+          <label for="livingCost">Living Cost per Month ($)*</label>
+          <input id="livingCost" type="number" name="livingCost" placeholder="e.g. 900" required>
+        </div>
+        <div class="form-group">
+          <label for="accommodationType">Accommodation Type*</label>
+          <select id="accommodationType" name="accommodationType" required>
+            <option value="on">On-Campus</option>
+            <option value="off">Off-Campus</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="transportationCost">Transportation Cost per Month ($)</label>
+          <input id="transportationCost" type="number" name="transportationCost" placeholder="e.g. 100">
+        </div>
+        <div class="form-group">
+          <label for="foodCost">Food Cost per Month ($)</label>
+          <input id="foodCost" type="number" name="foodCost" placeholder="e.g. 300">
+        </div>
+        <div class="form-group">
+          <label for="insuranceCost">Health Insurance per Year ($)</label>
+          <input id="insuranceCost" type="number" name="insuranceCost" placeholder="e.g. 800">
+        </div>
+        <div class="form-group">
+          <label for="country">Your Country*</label>
+          <input id="country" type="text" name="country" placeholder="e.g. Korea" required>
+        </div>
+        <div class="form-group">
+          <label for="major">Your Major</label>
+          <input id="major" type="text" name="major" placeholder="e.g. Computer Science">
+        </div>
+        <div class="form-group">
+          <label for="tips">Tips & Experience</label>
+          <textarea id="tips" name="tips" rows="4" placeholder="Share helpful tips"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="email">Contact Email</label>
+          <input id="email" type="email" name="email" placeholder="e.g. student@example.com">
+        </div>
+        <button type="submit" class="btn">Submit Review</button>
+      </form>
+    </section>
+
+    <!-- Student Reviews Preview -->
+    <section class="reviews-section">
+      <h2 class="section-title">Your Submitted Reviews</h2>
+      <div id="userReviews" class="reviews-list">
+        <!-- Reviews rendered by script.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 CollegeCost Voices</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
