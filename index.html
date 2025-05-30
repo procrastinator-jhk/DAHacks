@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FOMC Statement Analyzer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>FOMC Statement Analyzer</h1>
+
+    <textarea id="statementInput" placeholder="Paste the FOMC statement here..."></textarea>
+
+    <div class="buttons">
+      <button id="summarizeBtn">Summarize</button>
+      <button id="analyzeBtn">Analyze Tone</button>
+    </div>
+
+    <div class="results">
+      <h2>Summary</h2>
+      <p id="summaryResult">(summary will appear here)</p>
+
+      <h2>Tone</h2>
+      <p id="toneResult">(hawkish or dovish)</p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
