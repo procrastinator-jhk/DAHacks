@@ -1,391 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>College Cost Planner - Plan Your Children's Education</title>
-    <style>
-        /* ...（元のCSSそのまま、ここは省略。paste.txtのCSSをそのまま使ってください）... */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { text-align: center; margin-bottom: 40px; color: white; }
-        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-        .header p { font-size: 1.2rem; opacity: 0.9; }
-        .card { background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(10px);}
-        .section-title { font-size: 1.8rem; margin-bottom: 20px; color: #4a5568; border-bottom: 3px solid #667eea; padding-bottom: 10px;}
-        .form-group { margin-bottom: 20px;}
-        .form-row { display: flex; gap: 20px; flex-wrap: wrap;}
-        .form-row > div { flex: 1; min-width: 250px;}
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #4a5568;}
-        input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 16px; transition: border-color 0.3s ease;}
-        input:focus, select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);}
-        .btn { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 30px; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;}
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);}
-        .children-container { display: grid; gap: 20px; margin-top: 20px;}
-        .child-info { background: #f8fafc; padding: 20px; border-radius: 10px; border-left: 4px solid #667eea;}
-        .asset-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;}
-        .asset-item { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;}
-        .summary-card { background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); color: white; border-radius: 15px; padding: 30px; margin: 20px 0; text-align: center;}
-        .summary-item { margin: 15px 0; font-size: 1.2rem;}
-        .summary-value { font-size: 2rem; font-weight: bold; margin: 10px 0;}
-        .warning { background: #fed7d7; color: #c53030; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #f56565;}
-        .success { background: #c6f6d5; color: #276749; padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid #48bb78;}
-        .results-table { width: 100%; border-collapse: collapse; margin-top: 20px;}
-        .results-table th, .results-table td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0;}
-        .results-table th { background: #f8fafc; font-weight: 600; color: #4a5568;}
-        .progress-container { margin: 20px 0;}
-        .progress-bar { width: 100%; height: 20px; background: #e2e8f0; border-radius: 10px; overflow: hidden;}
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #45a049); transition: width 0.5s ease;}
-        @media (max-width: 768px) {
-            .form-row { flex-direction: column;}
-            .header h1 { font-size: 2rem;}
-            .asset-grid { grid-template-columns: 1fr;}
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Login with Email - College Cost Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .center-outer {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .login-container, .main-container {
+      background: rgba(255,255,255,0.98);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(102,126,234,0.15);
+      padding: 48px 34px 38px 34px;
+      width: 100%;
+      max-width: 420px;
+      margin: 32px auto;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.8s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .login-container h2 {
+      color: #5a67d8;
+      margin-bottom: 28px;
+      font-size: 2.1rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-weight: 600;
+      color: #4a5568;
+      text-align: left;
+      font-size: 1.04rem;
+    }
+    input[type="email"] {
+      width: 95%;
+      padding: 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 9px;
+      font-size: 1.15rem;
+      margin-bottom: 22px;
+      transition: border-color 0.3s;
+      background: #f8fafc;
+    }
+    input[type="email"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.10);
+    }
+    .btn {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 0;
+      border: none;
+      border-radius: 9px;
+      font-size: 1.13rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      margin-top: 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(102,126,234,0.09);
+      transition: background 0.18s, box-shadow 0.18s;
+    }
+    .btn:hover { background: #5a67d8; box-shadow: 0 4px 14px rgba(102,126,234,0.18);}
+    .error-message {
+      color: #c53030;
+      background: #fed7d7;
+      padding: 10px;
+      border-radius: 7px;
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+      display: none;
+    }
+    .main-container {
+      display: none;
+      max-width: 820px;
+      padding: 36px 4vw 28px 4vw;
+      margin: 38px auto;
+      background: rgba(255,255,255,0.99);
+      box-shadow: 0 12px 44px rgba(102,126,234,0.13);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+    .header h1 {
+      font-size: 2.35rem;
+      color: #5a67d8;
+      margin-bottom: 8px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-shadow: 1px 2px 8px rgba(102,126,234,0.09);
+    }
+    .header p {
+      font-size: 1.13rem;
+      color: #444;
+      margin-bottom: 0;
+    }
+    .welcome {
+      color: #667eea;
+      font-size: 1.09rem;
+      margin-bottom: 10px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .card {
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 22px 18px 16px 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 10px rgba(102,126,234,0.07);
+    }
+    .section-title {
+      font-size: 1.22rem;
+      color: #667eea;
+      margin-bottom: 13px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+    .form-row { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 12px;}
+    .form-row > div { flex: 1; min-width: 180px;}
+    input, select {
+      width: 90%;
+      padding: 10px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 7px;
+      font-size: 1rem;
+      background: #fff;
+      margin-bottom: 7px;
+    }
+    input:focus, select:focus {
+      border-color: #667eea;
+      outline: none;
+      background: #f0f5ff;
+    }
+    .summary-card {
+      background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+      color: #fff;
+      border-radius: 14px;
+      padding: 18px 12px;
+      margin: 18px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(76,175,80,0.11);
+    }
+    .summary-value { font-size: 1.35rem; font-weight: bold; margin: 8px 0;}
+    .results-table { width: 100%; border-collapse: collapse; margin-top: 16px;}
+    .results-table th, .results-table td { padding: 10px 7px; text-align: left; border-bottom: 1px solid #e2e8f0;}
+    .results-table th { background: #f8fafc; font-weight: 600; color: #4a5568;}
+    .progress-container { margin: 16px 0;}
+    .progress-bar { width: 100%; height: 18px; background: #e2e8f0; border-radius: 9px; overflow: hidden;}
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #4CAF50, #45a049); transition: width 0.5s;}
+    .warning, .success {
+      padding: 13px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-size: 1.03rem;
+      line-height: 1.6;
+    }
+    .warning { background: #fed7d7; color: #c53030; border-left: 4px solid #f56565;}
+    .success { background: #c6f6d5; color: #276749; border-left: 4px solid #48bb78;}
+    @media (max-width: 900px) {
+      .main-container { max-width: 97vw; }
+    }
+    @media (max-width: 700px) {
+      .main-container, .login-container { padding: 14px 2vw; }
+      .form-row { flex-direction: column; gap: 7px;}
+      .card { padding: 14px 8px 10px 8px;}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎓 College Cost Planner</h1>
-            <p>Plan and save for your children's college education with confidence</p>
-        </div>
-
-        <!-- Family Information -->
-        <div class="card">
-            <h2 class="section-title">Family Information</h2>
-            <div class="form-row">
-                <div>
-                    <label for="userEmail">Email Address</label>
-                    <input type="email" id="userEmail" placeholder="e.g., your@email.com" required>
-                </div>
-                <div>
-                    <label for="householdIncome">Annual Household Income ($)</label>
-                    <input type="number" id="householdIncome" placeholder="e.g., 85000">
-                </div>
-                <div>
-                    <label for="numChildren">Number of Children</label>
-                    <select id="numChildren" onchange="updateChildrenForms()">
-                        <option value="1">1 Child</option>
-                        <option value="2">2 Children</option>
-                        <option value="3">3 Children</option>
-                        <option value="4">4 Children</option>
-                        <option value="5">5 Children</option>
-                    </select>
-                </div>
-            </div>
-            <div id="childrenContainer" class="children-container">
-                <!-- Children forms will be generated here -->
-            </div>
-        </div>
-
-        <!-- Assets & Liabilities -->
-        <div class="card">
-            <h2 class="section-title">Assets & Liabilities</h2>
-            <div class="asset-grid">
-                <div class="asset-item">
-                    <label for="cashAssets">Cash & Savings ($)</label>
-                    <input type="number" id="cashAssets" placeholder="e.g., 25000">
-                </div>
-                <div class="asset-item">
-                    <label for="realEstate">Real Estate Value ($)</label>
-                    <input type="number" id="realEstate" placeholder="e.g., 350000">
-                </div>
-                <div class="asset-item">
-                    <label for="vehicles">Vehicles Value ($)</label>
-                    <input type="number" id="vehicles" placeholder="e.g., 25000">
-                </div>
-                <div class="asset-item">
-                    <label for="investments">Other Investments ($)</label>
-                    <input type="number" id="investments" placeholder="e.g., 50000">
-                </div>
-                <div class="asset-item">
-                    <label for="otherAssets">Other Assets ($)</label>
-                    <input type="number" id="otherAssets" placeholder="e.g., 10000">
-                </div>
-                <div class="asset-item">
-                    <label for="totalDebt">Total Debt ($)</label>
-                    <input type="number" id="totalDebt" placeholder="e.g., 200000">
-                </div>
-            </div>
-        </div>
-
-        <!-- Savings Plan -->
-        <div class="card">
-            <h2 class="section-title">Education Savings Plan</h2>
-            <div class="form-row">
-                <div>
-                    <label for="currentEducationFund">Current Education Fund ($)</label>
-                    <input type="number" id="currentEducationFund" placeholder="e.g., 15000">
-                </div>
-                <div>
-                    <label for="monthlyContribution">Monthly Contribution ($)</label>
-                    <input type="number" id="monthlyContribution" placeholder="e.g., 500">
-                </div>
-                <div>
-                    <label for="expectedReturn">Expected Annual Return (%)</label>
-                    <input type="number" id="expectedReturn" value="7" step="0.1" min="0" max="15">
-                </div>
-            </div>
-        </div>
-
-        <div style="text-align: center; margin: 30px 0;">
-            <button class="btn" onclick="calculateAll()">Calculate College Costs & Savings Plan</button>
-        </div>
-
-        <!-- Results -->
-        <div id="results" style="display: none;">
-            <!-- Net Worth Summary -->
-            <div class="summary-card">
-                <h3>Financial Summary</h3>
-                <div class="summary-item">
-                    <div>Total Assets</div>
-                    <div class="summary-value" id="totalAssets">$0</div>
-                </div>
-                <div class="summary-item">
-                    <div>Net Worth (Assets - Debt)</div>
-                    <div class="summary-value" id="netWorth">$0</div>
-                </div>
-            </div>
-
-            <!-- College Cost Summary -->
-            <div class="card">
-                <h2 class="section-title">College Cost Projections</h2>
-                <table class="results-table" id="collegeCostTable">
-                    <thead>
-                        <tr>
-                            <th>Child</th>
-                            <th>College Type</th>
-                            <th>Start Year</th>
-                            <th>Total 4-Year Cost</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Results will be populated here -->
-                    </tbody>
-                </table>
-                <div class="summary-item" style="margin-top: 20px; text-align: center;">
-                    <strong>Total Education Cost for All Children: <span id="totalEducationCost">$0</span></strong>
-                </div>
-            </div>
-
-            <!-- Savings Projection -->
-            <div class="card">
-                <h2 class="section-title">Savings Projection</h2>
-                <div class="form-row">
-                    <div>
-                        <strong>Current Education Fund:</strong> $<span id="currentFundDisplay">0</span>
-                    </div>
-                    <div>
-                        <strong>Monthly Contributions:</strong> $<span id="monthlyDisplay">0</span>
-                    </div>
-                    <div>
-                        <strong>Years Until First Child's College:</strong> <span id="yearsUntilCollege">0</span>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <label>Savings Progress</label>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                    </div>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <span id="progressText">0% of goal achieved</span>
-                    </div>
-                </div>
-                <div class="summary-item" style="text-align: center; margin: 20px 0;">
-                    <div><strong>Projected Savings by First College Year:</strong></div>
-                    <div class="summary-value" id="projectedSavings">$0</div>
-                </div>
-                <div id="savingsAnalysis">
-                    <!-- Analysis will be populated here -->
-                </div>
-            </div>
-        </div>
+  <div class="center-outer">
+    <!-- ログイン画面 -->
+    <div class="login-container" id="loginBox">
+      <h2>Login to College Cost Planner</h2>
+      <form id="loginForm" autocomplete="off">
+        <div class="error-message" id="loginError"></div>
+        <label for="loginEmail">Email Address</label>
+        <input type="email" id="loginEmail" required placeholder="you@example.com" autocomplete="username">
+        <button class="btn" type="submit">Login</button>
+      </form>
     </div>
+    <!-- メイン画面 -->
+    <div class="main-container" id="mainBox">
+      <div class="header">
+        <h1>🎓 College Cost Planner</h1>
+        <div class="welcome" id="welcomeMsg"></div>
+        <p>Plan and save for your children's college education with confidence</p>
+      </div>
+      <form id="mainForm" onsubmit="event.preventDefault(); calculateAll();">
+        <div class="card">
+          <h2 class="section-title">Family Information</h2>
+          <div class="form-row">
+            <div>
+              <label for="householdIncome">Annual Household Income ($)</label>
+              <input type="number" id="householdIncome" placeholder="e.g., 85000">
+            </div>
+            <div>
+              <label for="numChildren">Number of Children</label>
+              <select id="numChildren" onchange="updateChildrenForms()">
+                <option value="1">1 Child</option>
+                <option value="2">2 Children</option>
+                <option value="3">3 Children</option>
+                <option value="4">4 Children</option>
+                <option value="5">5 Children</option>
+              </select>
+            </div>
+          </div>
+          <div id="childrenContainer" class="children-container"></div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Assets & Liabilities</h2>
+          <div class="form-row">
+            <div>
+              <label for="cashAssets">Cash & Savings ($)</label>
+              <input type="number" id="cashAssets" placeholder="e.g., 25000">
+            </div>
+            <div>
+              <label for="realEstate">Real Estate Value ($)</label>
+              <input type="number" id="realEstate" placeholder="e.g., 350000">
+            </div>
+            <div>
+              <label for="vehicles">Vehicles Value ($)</label>
+              <input type="number" id="vehicles" placeholder="e.g., 25000">
+            </div>
+            <div>
+              <label for="investments">Other Investments ($)</label>
+              <input type="number" id="investments" placeholder="e.g., 50000">
+            </div>
+            <div>
+              <label for="otherAssets">Other Assets ($)</label>
+              <input type="number" id="otherAssets" placeholder="e.g., 10000">
+            </div>
+            <div>
+              <label for="totalDebt">Total Debt ($)</label>
+              <input type="number" id="totalDebt" placeholder="e.g., 200000">
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Education Savings Plan</h2>
+          <div class="form-row">
+            <div>
+              <label for="currentEducationFund">Current Education Fund ($)</label>
+              <input type="number" id="currentEducationFund" placeholder="e.g., 15000">
+            </div>
+            <div>
+              <label for="monthlyContribution">Monthly of Contribution ($)</label>
+              <input type="number" id="monthlyContribution" placeholder="e.g., 500">
+            </div>
+            <div>
+              <label for="expectedReturn">Expected Annual Return (%)</label>
+              <input type="number" id="expectedReturn" value="7" step="0.1" min="0" max="15">
+            </div>
+          </div>
+        </div>
+        <div style="text-align: center; margin: 30px 0;">
+          <button class="btn" type="submit">Calculate College Costs & Savings Plan</button>
+        </div>
+      </form>
+      <div id="results" style="display: none;">
+        <div class="summary-card">
+          <h3>Financial Summary</h3>
+          <div class="summary-item">
+            <div>Total Assets</div>
+            <div class="summary-value" id="totalAssets">$0</div>
+          </div>
+          <div class="summary-item">
+            <div>Net Worth (Assets - Debt)</div>
+            <div class="summary-value" id="netWorth">$0</div>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">College Cost Projections</h2>
+          <table class="results-table" id="collegeCostTable">
+            <thead>
+              <tr>
+                <th>Child</th>
+                <th>College Type</th>
+                <th>Start Year</th>
+                <th>Total 4-Year Cost</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class="summary-item" style="margin-top: 20px; text-align: center;">
+            <strong>Total Education Cost for All Children: <span id="totalEducationCost">$0</span></strong>
+          </div>
+        </div>
+        <div class="card">
+          <h2 class="section-title">Savings Projection</h2>
+          <div class="form-row">
+            <div>
+              <strong>Current Education Fund:</strong> $<span id="currentFundDisplay">0</span>
+            </div>
+            <div>
+              <strong>Monthly Contributions:</strong> $<span id="monthlyDisplay">0</span>
+            </div>
+            <div>
+              <strong>Years Until First Child's College:</strong> <span id="yearsUntilCollege">0</span>
+            </div>
+          </div>
+          <div class="progress-container">
+            <label>Savings Progress</label>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div style="text-align: center; margin-top: 10px;">
+              <span id="progressText">0% of goal achieved</span>
+            </div>
+          </div>
+          <div class="summary-item" style="text-align: center; margin: 20px 0;">
+            <div><strong>Projected Savings by First College Year:</strong></div>
+            <div class="summary-value" id="projectedSavings">$0</div>
+          </div>
+          <div id="savingsAnalysis"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ログイン処理
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const errorDiv = document.getElementById('loginError');
+      if (!email) {
+        errorDiv.textContent = "Please enter your email address.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      if (!validateEmail(email)) {
+        errorDiv.textContent = "Please enter a valid email address.";
+        errorDiv.style.display = "block";
+        return;
+      }
+      // ログイン成功
+      errorDiv.style.display = "none";
+      document.getElementById('loginBox').style.display = "none";
+      document.getElementById('mainBox').style.display = "block";
+      document.getElementById('welcomeMsg').textContent = `Welcome, ${email}`;
+    });
 
-    <script>
-        // College cost data (2025 base year)
-        const collegeCosts = {
-            'private': 62990,
-            'public-instate': 29910,
-            'public-outstate': 49080,
-            'community': 20570
-        };
-        const inflationRate = 0.06; // 6% annual increase
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
 
-        function updateChildrenForms() {
-            const numChildren = parseInt(document.getElementById('numChildren').value);
-            const container = document.getElementById('childrenContainer');
-            container.innerHTML = '';
-            for (let i = 1; i <= numChildren; i++) {
-                const childDiv = document.createElement('div');
-                childDiv.className = 'child-info';
-                childDiv.innerHTML = `
-                    <h4>Child ${i}</h4>
-                    <div class="form-row">
-                        <div>
-                            <label for="childAge${i}">Current Age</label>
-                            <input type="number" id="childAge${i}" min="0" max="17" placeholder="e.g., 8">
-                        </div>
-                        <div>
-                            <label for="collegeType${i}">Preferred College Type</label>
-                            <select id="collegeType${i}">
-                                <option value="public-instate">Public (In-State)</option>
-                                <option value="public-outstate">Public (Out-of-State)</option>
-                                <option value="private">Private</option>
-                                <option value="community">Community College (2-year)</option>
-                            </select>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(childDiv);
-            }
+    // 教育資金シミュレーター本体
+    const collegeCosts = {
+      'private': 62990,
+      'public-instate': 29910,
+      'public-outstate': 49080,
+      'community': 20570
+    };
+    const inflationRate = 0.06;
+
+    function updateChildrenForms() {
+      const numChildren = parseInt(document.getElementById('numChildren').value);
+      const container = document.getElementById('childrenContainer');
+      container.innerHTML = '';
+      for (let i = 1; i <= numChildren; i++) {
+        const childDiv = document.createElement('div');
+        childDiv.className = 'child-info';
+        childDiv.innerHTML = `
+          <h4>Child ${i}</h4>
+          <div class="form-row">
+            <div>
+              <label for="childAge${i}">Current Age</label>
+              <input type="number" id="childAge${i}" min="0" max="17" placeholder="e.g., 8">
+            </div>
+            <div>
+              <label for="collegeType${i}">Preferred College Type</label>
+              <select id="collegeType${i}">
+                <option value="public-instate">Public (In-State)</option>
+                <option value="public-outstate">Public (Out-of-State)</option>
+                <option value="private">Private</option>
+                <option value="community">Community College (2-year)</option>
+              </select>
+            </div>
+          </div>
+        `;
+        container.appendChild(childDiv);
+      }
+    }
+
+    function calculateCollegeCost(baseYear, yearsFromNow, collegeType) {
+      const baseCost = collegeCosts[collegeType];
+      const yearsOfCollege = collegeType === 'community' ? 2 : 4;
+      let totalCost = 0;
+      for (let year = 0; year < yearsOfCollege; year++) {
+        const inflatedCost = baseCost * Math.pow(1 + inflationRate, yearsFromNow + year);
+        totalCost += inflatedCost;
+      }
+      return totalCost;
+    }
+
+    function calculateFutureValue(presentValue, monthlyPayment, annualRate, years) {
+      const monthlyRate = annualRate / 12;
+      const months = years * 12;
+      const fvPresent = presentValue * Math.pow(1 + annualRate, years);
+      const fvPayments = monthlyPayment * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
+      return fvPresent + fvPayments;
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(amount);
+    }
+
+    function calculateAll() {
+      const householdIncome = parseFloat(document.getElementById('householdIncome').value) || 0;
+      const numChildren = parseInt(document.getElementById('numChildren').value);
+      const cashAssets = parseFloat(document.getElementById('cashAssets').value) || 0;
+      const realEstate = parseFloat(document.getElementById('realEstate').value) || 0;
+      const vehicles = parseFloat(document.getElementById('vehicles').value) || 0;
+      const investments = parseFloat(document.getElementById('investments').value) || 0;
+      const otherAssets = parseFloat(document.getElementById('otherAssets').value) || 0;
+      const totalDebt = parseFloat(document.getElementById('totalDebt').value) || 0;
+      const totalAssets = cashAssets + realEstate + vehicles + investments + otherAssets;
+      const netWorth = totalAssets - totalDebt;
+      const currentEducationFund = parseFloat(document.getElementById('currentEducationFund').value) || 0;
+      const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+      const expectedReturn = parseFloat(document.getElementById('expectedReturn').value) / 100 || 0.07;
+      let totalEducationCost = 0;
+      const childrenData = [];
+      let earliestCollegeYear = Infinity;
+      for (let i = 1; i <= numChildren; i++) {
+        const age = parseInt(document.getElementById(`childAge${i}`).value) || 0;
+        const collegeType = document.getElementById(`collegeType${i}`).value;
+        const yearsUntilCollege = Math.max(0, 18 - age);
+        const collegeStartYear = new Date().getFullYear() + yearsUntilCollege;
+        if (yearsUntilCollege < earliestCollegeYear) {
+          earliestCollegeYear = yearsUntilCollege;
         }
+        const cost = calculateCollegeCost(2025, yearsUntilCollege, collegeType);
+        totalEducationCost += cost;
+        childrenData.push({
+          child: i,
+          age,
+          collegeType,
+          startYear: collegeStartYear,
+          yearsUntilCollege,
+          cost
+        });
+      }
+      const projectedSavings = calculateFutureValue(
+        currentEducationFund,
+        monthlyContribution,
+        expectedReturn,
+        earliestCollegeYear
+      );
+      document.getElementById('totalAssets').textContent = formatCurrency(totalAssets);
+      document.getElementById('netWorth').textContent = formatCurrency(netWorth);
+      const tableBody = document.querySelector('#collegeCostTable tbody');
+      tableBody.innerHTML = '';
+      childrenData.forEach(child => {
+        const row = tableBody.insertRow();
+        row.innerHTML = `
+          <td>Child ${child.child} (Age ${child.age})</td>
+          <td>${child.collegeType.charAt(0).toUpperCase() + child.collegeType.slice(1).replace('-', ' ')}</td>
+          <td>${child.startYear}</td>
+          <td>${formatCurrency(child.cost)}</td>
+        `;
+      });
+      document.getElementById('totalEducationCost').textContent = formatCurrency(totalEducationCost);
+      document.getElementById('currentFundDisplay').textContent = currentEducationFund.toLocaleString();
+      document.getElementById('monthlyDisplay').textContent = monthlyContribution.toLocaleString();
+      document.getElementById('yearsUntilCollege').textContent = earliestCollegeYear;
+      document.getElementById('projectedSavings').textContent = formatCurrency(projectedSavings);
+      const progressPercentage = Math.min(100, (projectedSavings / totalEducationCost) * 100);
+      const shortfall = totalEducationCost - projectedSavings;
+      document.getElementById('progressFill').style.width = progressPercentage + '%';
+      document.getElementById('progressText').textContent = `${progressPercentage.toFixed(1)}% of goal achieved`;
+      const analysisDiv = document.getElementById('savingsAnalysis');
+      if (shortfall > 0) {
+        const additionalMonthlyNeeded = shortfall / (earliestCollegeYear * 12);
+        analysisDiv.innerHTML = `
+          <div class="warning">
+            <h4>⚠️ Savings Gap Identified</h4>
+            <p><strong>Shortfall:</strong> ${formatCurrency(shortfall)}</p>
+            <p><strong>Additional monthly contribution needed:</strong> ${formatCurrency(additionalMonthlyNeeded)}</p>
+            <p>Consider increasing your monthly contributions or exploring alternative funding options like 529 plans, education loans, or scholarships.</p>
+          </div>
+        `;
+      } else {
+        const surplus = projectedSavings - totalEducationCost;
+        analysisDiv.innerHTML = `
+          <div class="success">
+            <h4>🎉 Congratulations!</h4>
+            <p><strong>Surplus:</strong> ${formatCurrency(surplus)}</p>
+            <p>You're on track to meet your education savings goals! Consider this surplus for graduate school, additional educational opportunities, or other financial goals.</p>
+          </div>
+        `;
+      }
+      document.getElementById('results').style.display = 'block';
+      document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+    }
 
-        function calculateCollegeCost(baseYear, yearsFromNow, collegeType) {
-            const baseCost = collegeCosts[collegeType];
-            const yearsOfCollege = collegeType === 'community' ? 2 : 4;
-            let totalCost = 0;
-            for (let year = 0; year < yearsOfCollege; year++) {
-                const inflatedCost = baseCost * Math.pow(1 + inflationRate, yearsFromNow + year);
-                totalCost += inflatedCost;
-            }
-            return totalCost;
-        }
-
-        function calculateFutureValue(presentValue, monthlyPayment, annualRate, years) {
-            const monthlyRate = annualRate / 12;
-            const months = years * 12;
-            const fvPresent = presentValue * Math.pow(1 + annualRate, years);
-            const fvPayments = monthlyPayment * (Math.pow(1 + monthlyRate, months) - 1) / monthlyRate;
-            return fvPresent + fvPayments;
-        }
-
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            }).format(amount);
-        }
-
-        function calculateAll() {
-            // 追加：メールアドレス必須チェック
-            const userEmail = document.getElementById('userEmail').value.trim();
-            if (!userEmail) {
-                alert("Please enter your email address.");
-                document.getElementById('userEmail').focus();
-                return;
-            }
-            // Get basic inputs
-            const householdIncome = parseFloat(document.getElementById('householdIncome').value) || 0;
-            const numChildren = parseInt(document.getElementById('numChildren').value);
-            // Calculate assets
-            const cashAssets = parseFloat(document.getElementById('cashAssets').value) || 0;
-            const realEstate = parseFloat(document.getElementById('realEstate').value) || 0;
-            const vehicles = parseFloat(document.getElementById('vehicles').value) || 0;
-            const investments = parseFloat(document.getElementById('investments').value) || 0;
-            const otherAssets = parseFloat(document.getElementById('otherAssets').value) || 0;
-            const totalDebt = parseFloat(document.getElementById('totalDebt').value) || 0;
-            const totalAssets = cashAssets + realEstate + vehicles + investments + otherAssets;
-            const netWorth = totalAssets - totalDebt;
-            // Get savings inputs
-            const currentEducationFund = parseFloat(document.getElementById('currentEducationFund').value) || 0;
-            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
-            const expectedReturn = parseFloat(document.getElementById('expectedReturn').value) / 100 || 0.07;
-            // Calculate college costs for each child
-            let totalEducationCost = 0;
-            const childrenData = [];
-            let earliestCollegeYear = Infinity;
-            for (let i = 1; i <= numChildren; i++) {
-                const age = parseInt(document.getElementById(`childAge${i}`).value) || 0;
-                const collegeType = document.getElementById(`collegeType${i}`).value;
-                const yearsUntilCollege = Math.max(0, 18 - age);
-                const collegeStartYear = new Date().getFullYear() + yearsUntilCollege;
-                if (yearsUntilCollege < earliestCollegeYear) {
-                    earliestCollegeYear = yearsUntilCollege;
-                }
-                const cost = calculateCollegeCost(2025, yearsUntilCollege, collegeType);
-                totalEducationCost += cost;
-                childrenData.push({
-                    child: i,
-                    age,
-                    collegeType,
-                    startYear: collegeStartYear,
-                    yearsUntilCollege,
-                    cost
-                });
-            }
-            // Calculate projected savings
-            const projectedSavings = calculateFutureValue(
-                currentEducationFund,
-                monthlyContribution,
-                expectedReturn,
-                earliestCollegeYear
-            );
-            // Display results
-            document.getElementById('totalAssets').textContent = formatCurrency(totalAssets);
-            document.getElementById('netWorth').textContent = formatCurrency(netWorth);
-            // Populate college cost table
-            const tableBody = document.querySelector('#collegeCostTable tbody');
-            tableBody.innerHTML = '';
-            childrenData.forEach(child => {
-                const row = tableBody.insertRow();
-                row.innerHTML = `
-                    <td>Child ${child.child} (Age ${child.age})</td>
-                    <td>${child.collegeType.charAt(0).toUpperCase() + child.collegeType.slice(1).replace('-', ' ')}</td>
-                    <td>${child.startYear}</td>
-                    <td>${formatCurrency(child.cost)}</td>
-                `;
-            });
-            document.getElementById('totalEducationCost').textContent = formatCurrency(totalEducationCost);
-            // Display savings projection
-            document.getElementById('currentFundDisplay').textContent = currentEducationFund.toLocaleString();
-            document.getElementById('monthlyDisplay').textContent = monthlyContribution.toLocaleString();
-            document.getElementById('yearsUntilCollege').textContent = earliestCollegeYear;
-            document.getElementById('projectedSavings').textContent = formatCurrency(projectedSavings);
-            // Calculate progress and gap analysis
-            const progressPercentage = Math.min(100, (projectedSavings / totalEducationCost) * 100);
-            const shortfall = totalEducationCost - projectedSavings;
-            document.getElementById('progressFill').style.width = progressPercentage + '%';
-            document.getElementById('progressText').textContent = `${progressPercentage.toFixed(1)}% of goal achieved`;
-            // Savings analysis
-            const analysisDiv = document.getElementById('savingsAnalysis');
-            if (shortfall > 0) {
-                const additionalMonthlyNeeded = shortfall / (earliestCollegeYear * 12);
-                analysisDiv.innerHTML = `
-                    <div class="warning">
-                        <h4>⚠️ Savings Gap Identified</h4>
-                        <p><strong>Shortfall:</strong> ${formatCurrency(shortfall)}</p>
-                        <p><strong>Additional monthly contribution needed:</strong> ${formatCurrency(additionalMonthlyNeeded)}</p>
-                        <p>Consider increasing your monthly contributions or exploring alternative funding options like 529 plans, education loans, or scholarships.</p>
-                    </div>
-                `;
-            } else {
-                const surplus = projectedSavings - totalEducationCost;
-                analysisDiv.innerHTML = `
-                    <div class="success">
-                        <h4>🎉 Congratulations!</h4>
-                        <p><strong>Surplus:</strong> ${formatCurrency(surplus)}</p>
-                        <p>You're on track to meet your education savings goals! Consider this surplus for graduate school, additional educational opportunities, or other financial goals.</p>
-                    </div>
-                `;
-            }
-            document.getElementById('results').style.display = 'block';
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Initialize with one child form
-        window.onload = function() {
-            updateChildrenForms();
-        };
-    </script>
+    window.onload = function() {
+      updateChildrenForms();
+    };
+  </script>
 </body>
 </html>
